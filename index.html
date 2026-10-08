@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Para ti ❤️</title>
+  <style>
+    :root {
+      --bg-color: #0f111a;
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --accent: #e63946;
+      --accent-glow: rgba(230, 57, 70, 0.35);
+      --text: #f1faee;
+      --text-muted: #a8dadc;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-color);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 16px 60px 16px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 440px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    /* Reproductor flotante */
+    .music-bar {
+      position: sticky;
+      top: 12px;
+      z-index: 100;
+      background: rgba(15, 17, 26, 0.92);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    }
+
+    .song-title {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 220px;
+    }
+
+    .music-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 2px 10px var(--accent-glow);
+      transition: transform 0.1s ease;
+    }
+
+    .music-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* Encabezado */
+    header {
+      text-align: center;
+      padding-top: 8px;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 4px;
+    }
+
+    /* Contador */
+    .counter-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 20px 16px;
+      text-align: center;
+      backdrop-filter: blur(8px);
+    }
+
+    .counter-number {
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .counter-label {
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--text-muted);
+    }
+
+    /* Galería carrusel */
+    .gallery {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding-bottom: 6px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .gallery::-webkit-scrollbar {
+      display: none;
+    }
+
+    .photo-card {
+      flex: 0 0 88%;
+      scroll-snap-align: center;
+      background: var(--card-bg);
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .photo-card img {
+      width: 100%;
+      height: 340px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .photo-caption {
+      padding: 12px 14px;
+      font-size: 0.9rem;
+      color: var(--text);
+      text-align: center;
+      background: rgba(0, 0, 0, 0.25);
+    }
+
+    /* Carta estilo papel */
+    .letter-card {
+      background: #ffffff;
+      color: #2b2d42;
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+    }
+
+    .letter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      border-bottom: 1px dashed #dcdcdc;
+      padding-bottom: 10px;
+    }
+
+    .letter-title {
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: #1a1a1a;
+    }
+
+    .letter-content {
+      font-size: 0.95rem;
+      line-height: 1.75;
+      white-space: pre-line;
+      color: #333333;
+    }
+
+    .letter-quote {
+      margin: 16px 0;
+      padding-left: 12px;
+      border-left: 3px solid var(--accent);
+      font-style: italic;
+      color: #555;
+      font-size: 0.9rem;
+    }
+
+    .letter-footer {
+      margin-top: 20px;
+      text-align: right;
+      font-weight: 600;
+      font-style: italic;
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Reproductor nativo limpio -->
+    <div class="music-bar">
+      <span class="song-title">🎵 Reik - Pero Te Conocí</span>
+      <button class="music-btn" id="playBtn" onclick="toggleAudio()">
+        ▶ Play
+      </button>
+      <audio id="audioTrack" loop preload="auto">
+        <source src="musica.mp3" type="audio/mpeg" />
+      </audio>
+    </div>
+
+    <!-- Encabezado -->
+    <header>
+      <h1>Para mi persona favorita</h1>
+      <p class="subtitle">Un pequeño rincón para nosotros dos ✨</p>
+    </header>
+
+    <!-- Contador de Días -->
+    <div class="counter-card">
+      <div class="counter-number" id="daysCount">0</div>
+      <div class="counter-label" id="counterSub">Días caminando juntos</div>
+    </div>
+
+    <!-- Galería carrusel horizontal -->
+    <div class="gallery">
+      <div class="photo-card">
+        <img src="foto1.jpg" alt="Donde todo empezó" onerror="this.src='https://picsum.photos/400/500?random=11'" />
+        <div class="photo-caption">Donde todo empezó ✨</div>
+      </div>
+      <div class="photo-card">
+        <img src="foto2.jpg" alt="Risas favoritas" onerror="this.src='https://picsum.photos/400/500?random=12'" />
+        <div class="photo-caption">De mis risas favoritas contigo 🤍</div>
+      </div>
+      <div class="photo-card">
+        <img src="foto3.jpg" alt="Momentos favoritos" onerror="this.src='https://picsum.photos/400/500?random=13'" />
+        <div class="photo-caption">Nuestros pequeños momentos ☕</div>
+      </div>
+      <div class="photo-card">
+        <img src="foto4.jpg" alt="4 meses y contando" onerror="this.src='https://picsum.photos/400/500?random=14'" />
+        <div class="photo-caption">4 meses y contando... 💫</div>
+      </div>
+    </div>
+
+    <!-- Carta digital -->
+    <article class="letter-card">
+      <div class="letter-header">
+        <span class="letter-title">Hola, bonita</span>
+        <span>💌</span>
+      </div>
+      <div class="letter-content">
+        Hice este pequeño rincón digital para recordarte lo mucho que significas para mí y lo feliz que me hace compartir mis días contigo.
+
+        <div class="letter-quote">
+          "Y de pronto como estrella justo en medio de este mar, me curaste el corazón..."
+        </div>
+
+        Gracias por cada risa, por cada plática y por ser ese lugar seguro al que siempre quiero volver. No importa qué tan pesado o lleno de cosas esté el día, estar contigo siempre hace que todo valga la pena.
+      </div>
+      <div class="letter-footer">
+        Felices 4 meses. Con todo mi amor.
+      </div>
+    </article>
+  </div>
+
+  <script>
+    // Fecha de inicio: 20 de Junio de 2026 (Mes 5 en JS = Junio)
+    const startDate = new Date(2026, 5, 20);
+
+    function updateCounter() {
+      const today = new Date();
+      const diffTime = today - startDate;
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      
+      const countEl = document.getElementById('daysCount');
+      const labelEl = document.getElementById('counterSub');
+
+      if (diffDays >= 0) {
+        countEl.innerText = diffDays;
+        labelEl.innerText = 'Días caminando juntos';
+      } else {
+        countEl.innerText = '4';
+        labelEl.innerText = 'Meses juntos';
+      }
+    }
+    updateCounter();
+
+    // Control de audio local
+    const audio = document.getElementById('audioTrack');
+    const playBtn = document.getElementById('playBtn');
+
+    function toggleAudio() {
+      if (audio.paused) {
+        audio.play().then(() => {
+          playBtn.innerText = '⏸ Pausa';
+        }).catch(err => {
+          console.error("Error al reproducir:", err);
+        });
+      } else {
+        audio.pause();
+        playBtn.innerText = '▶ Play';
+      }
+    }
+  </script>
+</body>
+</html>
